@@ -42,12 +42,12 @@
                 </div>
             @endif
 
-
+          
                 <x-section-border />
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
 
-                    <button  class="bg-gray-900 rounded">
+                    <button  class="bg-gray-300 rounded">
                         <x-dropdown-link  href="{{ route('logout') }}"
                                           @click.prevent="$root.submit();">
                             {{ __('بیرون رفتن از حساب کاربری') }}

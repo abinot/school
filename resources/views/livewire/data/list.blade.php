@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Data;
 use Livewire\Attributes\On;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
@@ -9,6 +10,7 @@ new class extends Component
     public Collection $data_s;
 
     public ?data $editing = null;
+    
     public function mount(): void
     {
         $this->getData();
@@ -17,7 +19,7 @@ new class extends Component
     public function getData(): void
     {
         $this->data_s = \App\Models\Data::with('user')
-            ->where('user_id', Auth::id()) // فیلتر بر اساس user_id
+            ->where('user_id', Auth::id()) 
             ->latest()
             ->get();
     }
@@ -27,13 +29,28 @@ new class extends Component
 
         $this->getData();
     }
+    #[On('data-edit-canceled')]
+
+    #[On('data-updated')] 
+
+    public function disableEditing(): void
+
+    {
+
+        $this->editing = null;
+
+ 
+
+        $this->getData();
+
+    } 
+
 }; ?>
 
 <div>
     <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
         @foreach ($data_s as $data)
             <div class="p-6 flex space-x-2" wire:key="{{ $data->id }}">
-p
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <div>
@@ -54,18 +71,18 @@ p
                                 </x-slot>
                                 <x-slot name="content">
                                     <x-dropdown-link wire:click="edit({{ $data->id }})">
-                                        {{ __('Edit') }}
+                                        {{ __('ویرایش') }}
                                     </x-dropdown-link>
                                 </x-slot>
                             </x-dropdown>
                         @endif
                     </div>
                     <p class="mt-4 text-gray-900 font-bold">{{ $data->key }}</p>
-                    <p class="m-2 text-gray-900">{{ $data->value }}</p>
+                 
                     @if ($data->is($editing))
-                        <livewire:chirps.edit :chirp="$chirp" :key="$chirp->id" />
+                        <livewire:data.edit :data="$data" :key="$data->id" />
                     @else
-                        <p class="mt-4 text-lg text-gray-900">{{ $data->message }}</p>
+                        <p class="mt-4 text-lg text-gray-900">{{ $data->value }}</p>
                     @endif
                 </div>
             </div>

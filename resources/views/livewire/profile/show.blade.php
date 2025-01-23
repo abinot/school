@@ -1,5 +1,4 @@
 <?php
-
 use App\Models\User;
 use Livewire\Volt\Component;
 
@@ -7,33 +6,43 @@ new class extends Component {
 
     public $showPopup = false;
     public $profileLink = 'https://www.example.com/user-profile';
+    public $user;
+
     public function togglePopup()
     {
         $this->showPopup = !$this->showPopup;
     }
-    public $user;
+
     public function mount()
     {
         session_start();
         $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $path = parse_url($url, PHP_URL_PATH);
-        $path =  basename($path);
+        $path = basename($path);
         $lastSegment = trim("$path");
-        $this->user = User::where('username', $lastSegment)
-            ->orWhere('id', $lastSegment)
-            ->first();
+
+        if (is_numeric($lastSegment)) {
+            // If $lastSegment is a number, consider it as an ID
+            $this->user = User::where('id', $lastSegment)->first();
+        } else {
+            // If $lastSegment is not a number, consider it as a username
+            $this->user = User::where('username', $lastSegment)->first();
+        }
 
         if (!$this->user) {
-            // بارگذاری کاربر ناموفق
-            // می‌توانید یک پیام خطا نمایش دهید یا به صفحه دیگری هدایت کنید
+            // In a controller or route
+            abort(404);
+
+            die("404 Error not found");
+            exit();
+            
         }
     }
+};
+?>
+<div dir="ltr">
 
-}; ?>
-
-<div>
-
-    @if (!isset($user['username']))
+    @if (3 == 4)
         <p>کاربر پیدا نشد.</p>
 
     @else
@@ -110,18 +119,10 @@ new class extends Component {
                     </span>
                     </div>
                     <p class="text-gray-700 pl-10">
-                        @if($user && $user->data)
-                            @php $headerFound = false; @endphp
-                            @foreach($user->data as $data)
-                                @if($data['key'] == "header")
-                                    {{$data['value']}}
-                                    @php $headerFound = true; @endphp
-                                @endif
-                            @endforeach
-                            @if(!$headerFound)
-                                ({{$user->username}})
-                            @endif
+                        @if(isset($user->username))
+                        ({{$user->username}})
                         @endif
+
 
 
 
@@ -131,7 +132,7 @@ new class extends Component {
 
                         @if($user && $user->data)
                             @foreach($user->data as $data)
-                                @if($data['key'] == "header2")
+                                @if($data['key'] == "header")
                                     {{$data['value']}}
 
                                 @endif
@@ -145,7 +146,7 @@ new class extends Component {
                 <p class="text-sm text-gray-700 pl-16">
                     @if($user && $user->data)
                         @foreach($user->data as $data)
-                            @if($data['key'] == "header3")
+                            @if($data['key'] == "header2")
                                 {{$data['value']}}
 
                             @endif
@@ -156,7 +157,7 @@ new class extends Component {
 
 
 
-                {{-- /// connect and chat button ///--}}
+               
 
 
 
@@ -164,46 +165,56 @@ new class extends Component {
 
             <div class="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
 
-                <div class="flex flex-col w-full 2xl:w-2/3">
-                    <div class="flex-1 bg-white rounded-lg shadow-xl p-8">
-                        {{--                        <h4 class="text-xl text-gray-900 font-bold"> ////////// </h4>--}}
-                        <p class="mt-2 text-gray-700">
-                            @if($user && $user->data)
-                                @foreach($user->data as $data)
-                                    @if(($data['key'] == "biography" || $data['key'] == "text") && $data['show'] == 2)
-                                        <li class="flex py-2">
-                                            <span class="text-gray-700">{{$data['value']}}</span>
-                                        </li>
-                        @endif
-                        @endforeach
-                        @else
-                            <p>داده‌ای وجود ندارد.</p>
-                            @endif
-                            </p>
+            <div class="flex flex-col w-full 2xl:w-2/3">
+    <div class="flex-1 bg-white rounded-lg shadow-xl p-8">
+        {{-- <h4 class="text-xl text-gray-900 font-bold"> ////////// </h4> --}}
+        <p class="mt-2 text-gray-700">
+            @if($user && $user->data)
+                @php $hasData = false; @endphp
+                @foreach($user->data as $data)
+                    @if(($data['key'] == "biography" || $data['key'] == "text") && $data['show'] == 2)
+                        @php $hasData = true; @endphp
+                        <li class="flex py-2">
+                            <span class="text-gray-700">{{$data['value']}}</span>
+                        </li>
+                    @endif
+                @endforeach
 
-                    </div>
+                @if(!$hasData)
+                    <p>داده‌ای وجود ندارد.</p>
+                @endif
+            @else
+                <p>داده‌ای وجود ندارد.</p>
+            @endif
+        </p>
+    </div>
+</div>
 
-
-                    {{--                     chart--}}
-                </div>
 
                 <div class="w-full flex flex-col 2xl:w-1/3">
                     <div class="flex-1 bg-white rounded-lg shadow-xl p-8">
                         {{--                        <h4 class="text-xl text-gray-900 font-bold">Personal Info</h4>--}}
                         <ul class="mt-2 text-gray-700">
-                            @if($user && $user->data)
-                                @foreach($user->data as $data)
-                                    @if($data['show'] == 2 && $data['key'] !== "biography" && $data['key'] !== "text")
-                                        <li class="flex border-y py-2">
-                                            <span class="font-bold w-24">{{$data['key']}}:</span>
-                                            <span class="text-gray-700">{{$data['value']}}</span>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            @else
-                                <p>داده‌ای وجود ندارد.</p>
-                            @endif
-                        </ul>
+    @if($user && $user->data)
+        @php $hasData = false; @endphp
+        @foreach($user->data as $data)
+            @if($data['show'] == 2 && $data['key'] !== "biography" && $data['key'] !== "text")
+                @php $hasData = true; @endphp
+                <li class="flex border-y py-2">
+                    <span class="font-bold w-24">{{$data['key']}}:</span>
+                    <span class="text-gray-700">{{$data['value']}}</span>
+                </li>
+            @endif
+        @endforeach
+
+        @if(!$hasData)
+            <p>داده‌ای وجود ندارد.</p>
+        @endif
+    @else
+        <p>داده‌ای وجود ندارد.</p>
+    @endif
+</ul>
+
 
                     </div>
 

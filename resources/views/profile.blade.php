@@ -1,5 +1,5 @@
-<x-app-layout>
+<x-guest-layout>
 
         <livewire:profile.show />
 
-</x-app-layout>
+</x-guest-layout>

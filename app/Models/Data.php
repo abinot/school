@@ -18,5 +18,7 @@ class Data extends Model
         'show',
         'added_by',
         'selected_user',
+        'message',
+        'massage',
     ];
 }
