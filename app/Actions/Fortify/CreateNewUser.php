@@ -1,5 +1,6 @@
 <?php namespace App\Actions\Fortify;
 
+
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -17,12 +18,19 @@ class CreateNewUser implements CreatesNewUsers {
      * @param array<string, string> $input
      */
     public function create(array $input): User {
+        $reservedUsernames = include ('reserved_usernames.php');
+
         Validator::make($input, [
             'username' => [
                 'required',
                 'string',
                 'max:255',
                 'regex:/^[a-zA-Z0-9_]+$/', // فقط حروف انگلیسی، اعداد و _
+                function ($attribute, $value, $fail) use ($reservedUsernames) {
+                    if (in_array(strtolower($value), $reservedUsernames)) {
+                        $fail('این نام‌کاربری نمی‌تواند استفاده شود.');
+                    }
+                },
             ],
             'email' => [
                 'required',
@@ -37,12 +45,12 @@ class CreateNewUser implements CreatesNewUsers {
 
         // تبدیل نام کاربری به حروف کوچک
         $input['username'] = strtolower($input['username']);
-
+        $input['name'] = $input['username'];
 
         return DB::transaction(function () use ($input) {
             return tap(User::create([
                 'username' => $input['username'],
-                'name' => $input['username'],
+                'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) {

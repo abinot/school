@@ -18,8 +18,7 @@ new class extends Component {
         session_start();
         $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $path = parse_url($url, PHP_URL_PATH);
-        $path = basename($path);
-        $lastSegment = trim("$path");
+        $lastSegment = trim(basename($path));
 
         if (is_numeric($lastSegment)) {
             // If $lastSegment is a number, consider it as an ID
@@ -30,15 +29,13 @@ new class extends Component {
         }
 
         if (!$this->user) {
-            // In a controller or route
             abort(404);
-
             die("404 Error not found");
             exit();
-            
         }
     }
 };
+
 ?>
 <div dir="ltr">
 

@@ -15,7 +15,7 @@ Route::get('/', function () {
 Route::get('/user/{username}', [\App\Http\Controllers\ProfileController::class, 'index'])
     ->name('Data');
 
-Route::get('data', [DataController::class, 'index'])
+Route::get('/user/data', [DataController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('data');
 
