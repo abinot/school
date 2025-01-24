@@ -10,7 +10,13 @@ new class extends Component
     public Collection $data_s;
 
     public ?data $editing = null;
-    
+    public function delete(Data $data): void
+
+    {
+        $this->authorize('delete', $data);
+        $data->delete();
+        $this->getData();
+    }
     public function mount(): void
     {
         $this->getData();
@@ -73,6 +79,11 @@ new class extends Component
                                     <x-dropdown-link wire:click="edit({{ $data->id }})">
                                         {{ __('ویرایش') }}
                                     </x-dropdown-link>
+                                    <x-dropdown-link wire:click="delete({{ $data->id }})" wire:confirm="آیا از اجرا این کار بی گمانید؟"> 
+
+                                        {{ __('پاک کردن') }}
+
+                                    </x-dropdown-link> 
                                 </x-slot>
                             </x-dropdown>
                         @endif

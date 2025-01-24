@@ -12,12 +12,7 @@ Route::get('/', function () {
 //     ->middleware(['auth', 'verified'])
 //     ->name('profile');
 
-Route::get('/user/{username}', [\App\Http\Controllers\ProfileController::class, 'index'])
-    ->name('Data');
 
-Route::get('/user/data', [DataController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('data');
 
 Route::middleware([
     'auth:sanctum',
@@ -28,3 +23,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/user/data', [DataController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('data');
+    
+
+Route::get('/{username}', [\App\Http\Controllers\ProfileController::class, 'index'])
+    ->name('Data');
+

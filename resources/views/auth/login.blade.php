@@ -17,12 +17,12 @@
             @csrf
 
             <div>
-                <x-label for="auth" value="ایمیل" />
+                <x-label for="auth" value="نام کاربری یا ایمیل" />
                 <x-input id="auth" class="block mt-1 w-full" type="text" name="auth" :value="old('auth')" required autofocus autocomplete="username" />
             </div>
 
             <div class="mt-4">
-                <x-label for="password" value="رمزعبور" />
+                <x-label for="password" value="گذرواژه" />
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
             </div>
 

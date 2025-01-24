@@ -46,7 +46,7 @@ class DataPolicy
      */
     public function delete(User $user, Data $data): bool
     {
-        return false;
+      return $this->update($user, $data);
     }
 
     /**
