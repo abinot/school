@@ -83,15 +83,6 @@ new class extends Component {
         <div>
 <div class="w-1/2 m-5 p-6">
             <form wire:submit="store">
-                @if (auth()->check() && auth()->user()->role == 'admin')
-                    <input
-                        wire:model="key"
-                        type="text"
-                        placeholder="{{ __('کلید') }}"
-                        class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                        @if($keyDisabled)  disabled @endif
-                    >
-                @endif
                 <br>
                 <input
                     wire:model="key"
@@ -141,7 +132,7 @@ new class extends Component {
                 <br>
                 <textarea
                     wire:model="value"
-                    placeholder="{{ __('مقدار') }}"
+                    placeholder="{{ __('داده') }}"
                     class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 ></textarea>
 

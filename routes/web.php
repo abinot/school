@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -28,7 +29,10 @@ Route::get('/user/data', [DataController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('data');
     
+    
+Route::get('/user/course', [CourseController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('course');    
 
 Route::get('/{username}', [\App\Http\Controllers\ProfileController::class, 'index'])
     ->name('Data');
-
