@@ -110,8 +110,11 @@
                         </div>
                     </div>
                 </div>
+                <livewire:course.ad />
+                
             </div>
         </div>
         
     </main>
+    
 </x-app-layout>

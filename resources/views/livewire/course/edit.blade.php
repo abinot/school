@@ -19,10 +19,13 @@ new class extends Component
  
 
     #[Validate('required|max:5000')]
-    public string $data = '';
+    public $data = '';
 
     #[Validate('required|string|max:50')]
     public string $title = '';
+
+    #[Validate('required|string|max:100')]
+    public string $short_data = '';
 
     #[Validate('required|string|max:255')]
     public string $image = '';
@@ -37,6 +40,7 @@ new class extends Component
         $this->title = $this->course->title;
         $this->image = $this->course->image;
         $this->data = $this->course->data;
+        $this->short_data = $this->course->short_data;
         $this->show = $this->course->show;
 
     }
@@ -84,8 +88,11 @@ new class extends Component
     <form wire:submit="update"> 
 
     <input wire:model="image" id="image"   placeholder="{{ __('لینک نگاره') }}"  class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-
+<br>
     <input wire:model="title" id="title"   placeholder="{{ __('نام دوره') }}"  class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+   <br>
+    <input wire:model="short_data" id="short_data"   placeholder="{{ __('متن کوتاه') }}"  class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+    <br>
         <textarea
 
             wire:model="data"
