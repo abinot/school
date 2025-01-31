@@ -28,7 +28,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Data::class);
     }
-
+    public function reg_courses()
+    {
+        return $this->belongsToMany(Course::class)->withTimestamps();
+    }
     public function course(): HasMany
 
     {

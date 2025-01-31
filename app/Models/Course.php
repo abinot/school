@@ -14,11 +14,11 @@ class Course extends Model
         return $this->belongsTo(User::class);
 
     }
+    public function reg_users()
+{
+    return $this->belongsToMany(User::class)->withTimestamps();
+}
 
-    public function data(): HasMany
-    {
-        return $this->hasMany(CourseData::class);
-    }
     protected $fillable = [
 
         'data',

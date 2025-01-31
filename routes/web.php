@@ -32,8 +32,10 @@ Route::get('/user/data', [DataController::class, 'index'])
     
   
     
-Route::get('/user/course/{course_link}', [CourseDataController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+Route::get('/c/{course_link}', [CourseDataController::class, 'index'])
+    ->name('course');  
+
+Route::get('/course/{course_link}', [CourseDataController::class, 'index'])
     ->name('course');  
 
 Route::get('/user/course', [CourseController::class, 'index'])

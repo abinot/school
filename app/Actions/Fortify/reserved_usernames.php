@@ -13,5 +13,9 @@ return [
     'logout',
     'login',
     'livewire',
+    'c',
+    'course',
+    'l',
+    'link'
     // Add other route names here
 ];

@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* اضافه کردن استایل‌های سفارشی برای عناصر HTML */
 
 [x-cloak] {
     display: none;
