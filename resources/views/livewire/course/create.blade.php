@@ -36,7 +36,7 @@ new class extends Component
         $this->title = '';
         $this->short_data = '';
         $this->show = 0;
-        $this->dispatch('course-created'); 
+        $this->dispatch('post-created'); 
         $this->show = 0;
 
     } 

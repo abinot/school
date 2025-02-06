@@ -31,7 +31,10 @@ class CoursePolicy
     {
         return false;
     }
-
+    public function isAdmin(): bool
+    {
+        return $this->admin == 1; // فرض می‌کنیم که نقش کاربر در فیلدی به نام role ذخیره شده است
+    }
     /**
      * Determine whether the user can update the model.
      */
@@ -45,8 +48,9 @@ class CoursePolicy
      */
     public function delete(User $user, Course $course): bool
     {
-        return $this->update($user, $course);
+        return $course->user()->is($user) || $user->admin == 1;
     }
+
 
     /**
      * Determine whether the user can restore the model.

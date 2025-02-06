@@ -9,23 +9,23 @@ use Illuminate\Support\Str;
 
 new class extends Component
 {
-    public Collection $courses;
+    public Collection $posts;
 
     public ?Course $editing = null;
-    public function delete(Course $course): void
+    public function delete(Course $post): void
 
     {
-        $this->authorize('delete', $course);
-        $course->delete();
-        $this->getcourse();
+        $this->authorize('delete', $post);
+        $post->delete();
+        $this->getPost();
     }
     public function mount(): void
     {
         
-        $this->getcourse();
+        $this->getPost();
     }
-    #[On('course-created')]
-    public function getcourse(): void
+    #[On('post-created')]
+    public function getPost(): void
     {
         session_start();
         $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -34,25 +34,25 @@ new class extends Component
     
         if (is_numeric($lastSegment)) {
             // If $lastSegment is a number, consider it as an ID
-            $this->courses = \App\Models\Course::where('id', $lastSegment)->get();
+            $this->posts = \App\Models\Course::where('id', $lastSegment)->get();
         } else {
             // If $lastSegment is not a number, consider it as a title
-            $this->courses = \App\Models\Course::where('title', $lastSegment)->get();
+            $this->posts = \App\Models\Course::where('title', $lastSegment)->get();
         }
-        if ($this->courses->isEmpty()) {
+        if ($this->posts->isEmpty()) {
             abort(404);
         }
     }
     
-    public function edit(course $course): void
+    public function edit(course $post): void
     {
-        $this->editing = $course;
+        $this->editing = $post;
 
-        $this->getcourse();
+        $this->getPost();
     }
-    #[On('course-edit-canceled')]
+    #[On('post-edit-canceled')]
 
-    #[On('course-updated')] 
+    #[On('post-updated')] 
 
     public function disableEditing(): void
 
@@ -62,13 +62,13 @@ new class extends Component
 
  
 
-        $this->getcourse();
+        $this->getPost();
 
     } 
    
 
     
-    public function register(int $courseId): void
+    public function register(int $postId): void
     {
         if (!Auth::check()) {
             session()->flash('error', 'برای ثبت‌نام باید وارد سیستم شوید.');
@@ -77,13 +77,13 @@ new class extends Component
     
         $user = Auth::user();
     
-        if ($user->reg_courses()->where('course_id', $courseId)->exists()) {
+        if ($user->reg_courses()->where('course_id', $postId)->exists()) {
             session()->flash('error', 'شما قبلاً در این دوره ثبت‌نام کرده‌اید!');
             return;
         }
     
-        $user->reg_courses()->attach($courseId);
-        redirect()->to(URL::to('/welcome?type=course&id='.$courseId));
+        $user->reg_courses()->attach($postId);
+        redirect()->to(URL::to('/welcome?type=course&id='.$postId)); //need to change
 
 
         
@@ -102,28 +102,28 @@ new class extends Component
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
-                @foreach ($courses as $course)
-                    <div class="mb-8" wire:key="{{ $course->id }}">
+                @foreach ($posts as $post)
+                    <div class="mb-8" wire:key="{{ $post->id }}">
                         <div class="flex justify-between items-center mb-4">
-                            @if ($course->user->is(auth()->user()))
+                            @if ($post->user->is(auth()->user()))
                                 <!-- Dropdown for Edit/Delete -->
                             @endif
                         </div>
-                        @if ($course->is($editing))
-                            <livewire:course.edit :course="$course" :key="$course->id" />
+                        @if ($post->is($editing))
+                            <livewire:post.edit :post="$post" :key="$post->id" />
                         @else
-                            <img src="{{ $course->image }}" width="700px" height="350px" class="mb-4">
-                            <p class="mt-4 text-gray-900 font-bold text-2xl">{{ $course->title }}</p>
-                            <p class="mt-4 text-lg text-gray-900">{{ $course->short_data }}</p>
+                            <img src="{{ $post->image }}" width="700px" height="350px" class="mb-4">
+                            <p class="mt-4 text-gray-900 font-bold text-2xl">{{ $post->title }}</p>
+                            <p class="mt-4 text-lg text-gray-900">{{ $post->short_data }}</p>
                             <br>
                             <hr><hr>
                             <br>
                             <div class="prose md">
-                                {!! Str::markdown($course->data) !!}
+                                {!! Str::markdown($post->data) !!}
                             </div>
 
                             <!-- دکمه ثبت‌نام -->
-                            <button wire:click="register({{ $course->id }})" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+                            <button wire:click="register({{ $post->id }})" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
                                 نام نویسی در دوره
                             </button>
 

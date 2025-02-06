@@ -14,7 +14,7 @@ new class extends Component
 
 {
 
-    public Course $course; 
+    public Course $post;
 
  
 
@@ -37,11 +37,11 @@ new class extends Component
     public function mount(): void
 
     {
-        $this->title = $this->course->title;
-        $this->image = $this->course->image;
-        $this->data = $this->course->data;
-        $this->short_data = $this->course->short_data;
-        $this->show = $this->course->show;
+        $this->title = $this->post->title;
+        $this->image = $this->post->image;
+        $this->data = $this->post->data;
+        $this->short_data = $this->post->short_data;
+        $this->show = $this->post->show;
 
     }
 
@@ -51,7 +51,7 @@ new class extends Component
 
     {
 
-        $this->authorize('update', $this->course);
+        $this->authorize('update', $this->post);
 
  
 
@@ -59,11 +59,11 @@ new class extends Component
 
  
 
-        $this->course->update($validated);
+        $this->post->update($validated);
 
  
 
-        $this->dispatch('course-updated');
+        $this->dispatch('post-updated');
 
     }
 
@@ -73,7 +73,7 @@ new class extends Component
 
     {
 
-        $this->dispatch('course-edit-canceled');
+        $this->dispatch('post-edit-canceled');
 
     }  
 
