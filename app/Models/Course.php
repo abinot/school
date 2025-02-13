@@ -24,6 +24,9 @@ class Course extends Model
         'data',
         'image',
         'title',
+        'type',
+        'button1',
+        'button2',
         'short_data',
 
     ];

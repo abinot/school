@@ -7,69 +7,56 @@ use Livewire\Volt\Component;
 
 new class extends Component
 {
-    public Collection $posts;
+    public Collection $courses;
 
     public ?Course $editing = null;
-    public function delete(Course $post): void
 
+    public function delete(Course $course): void
     {
-        $this->authorize('delete', $post);
-        $post->delete();
-        $this->getPost();
+        $this->authorize('delete', $course);
+        $course->delete();
+        $this->getCourses();
     }
+
     public function mount(): void
     {
-        $this->getPost();
+        $this->getCourses();
     }
-    #[On('post-created')]
-    public function getPost(): void
+
+    #[On('course-created')]
+    public function getCourses(): void
     {
-        $this->posts = \App\Models\Course::with('user')
-            ->where('user_id', Auth::id()) 
+        $this->courses = \App\Models\Course::with('user')
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
     }
-    public function edit(course $post): void
-    {
-        $this->editing = $post;
 
-        $this->getPost();
+    public function edit(Course $course): void
+    {
+        $this->editing = $course;
+        $this->getCourses();
     }
-    #[On('post-edit-canceled')]
 
-    #[On('post-updated')] 
-
+    #[On('course-edit-canceled')]
+    #[On('course-updated')]
     public function disableEditing(): void
-
     {
-
         $this->editing = null;
-
- 
-
-        $this->getPost();
-
-    } 
-
-
-
- 
-
+        $this->getCourses();
+    }
 }; ?>
 
 <div>
     <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-        @foreach ($posts as $post)
-        
-            <div class="p-6 flex space-x-2" wire:key="{{ $post->id }}">
+        @foreach ($courses as $course)
+            <div class="p-6 flex space-x-2" wire:key="{{ $course->id }}">
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <div>
-
-                            <small class="ml-2 text-sm text-gray-600">{{ $post->created_at->format('j M Y, g:i a') }}</small>
-
+                            <small class="ml-2 text-sm text-gray-600">{{ $course->created_at->format('j M Y, g:i a') }}</small>
                         </div>
-                        @if ($post->user->is(auth()->user()))
+                        @if ($course->user->is(auth()->user()))
                             <x-dropdown>
                                 <x-slot name="trigger">
                                     <button>
@@ -79,35 +66,31 @@ new class extends Component
                                     </button>
                                 </x-slot>
                                 <x-slot name="content">
-                                <x-dropdown-link  > 
-                          <a href="{{ config('app.url') }}/c/{{ $post->id }}" class="bg-white p-4 shadow-sm flex flex-col items-center" style="border-radius:22px; text-decoration: none; color: inherit;">
-                                    {{ __('مشاهده') }}
-</a>
-
-                                </x-dropdown-link> 
-                                    <x-dropdown-link wire:click="edit({{ $post->id }})">
+                                    <x-dropdown-link>
+                                        <a href="{{ config('app.url') }}/c/{{ $course->id }}" class="bg-white p-4 shadow-sm flex flex-col items-center" style="border-radius:22px; text-decoration: none; color: inherit;">
+                                            {{ __('مشاهده') }}
+                                        </a>
+                                    </x-dropdown-link>
+                                    <x-dropdown-link wire:click="edit({{ $course->id }})">
                                         {{ __('ویرایش') }}
                                     </x-dropdown-link>
-                                    
-                                    <x-dropdown-link wire:click="delete({{ $post->id }})" wire:confirm="آیا از اجرا این کار بی گمانید؟"> 
-
+                                    <x-dropdown-link wire:click="delete({{ $course->id }})" wire:confirm="آیا از اجرا این کار بی گمانید؟">
                                         {{ __('پاک کردن') }}
-
-                                    </x-dropdown-link> 
+                                    </x-dropdown-link>
                                 </x-slot>
                             </x-dropdown>
                         @endif
                     </div>
-                   
-                 
-                    @if ($post->is($editing))
-                        <livewire:post.edit :post="$post" :key="$post->id" />
+
+                    @if ($course->is($editing))
+                        <livewire:course.edit :course="$course" :key="$course->id" />
                     @else
-                    <img src="{{ $post->image }}" width="200px" height="100px" >
-                    <p class="mt-4 text-gray-900 font-bold">{{ $post->title }}</p>
-                        <p class="mt-4 text-lg text-gray-900">{{ $post->short_data }}</p>
+                        <img src="{{ $course->image }}" width="200px" height="100px">
+                        <p class="mt-4 text-gray-900 font-bold">{{ $course->title }}</p>
+                        <p class="mt-4 text-lg text-gray-900">{{ $course->short_data }}</p>
                     @endif
                 </div>
             </div>
         @endforeach
     </div>
+</div>

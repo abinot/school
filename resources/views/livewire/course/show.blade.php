@@ -123,8 +123,15 @@ new class extends Component
                             </div>
 
                             <!-- دکمه ثبت‌نام -->
+                            @if ($post->type == "course")
+                                <h4>its course</h4>
+                            @endif
+                            @if ($post->type == "post")
+                                <h4>its post</h4>
+                            @endif
+                            <h4>{{ $post->type}}</h4>
                             <button wire:click="register({{ $post->id }})" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-                                نام نویسی در دوره
+                             نام نویسی
                             </button>
 
                             <!-- نمایش پیام‌ها -->

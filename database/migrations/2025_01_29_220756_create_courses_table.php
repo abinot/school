@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->longText('data');
-            $table->string('short_data');
+            $table->string('type');
+            $table->string('short_data',100);
             $table->string('title',50);
             $table->string('image',255);
+            $table->string('button1')->nullable()->default(null);
+            $table->string('button2')->nullable()->default(null);
+
             $table->integer('show')->default(0);
             $table->timestamps();
         });
