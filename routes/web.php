@@ -4,6 +4,7 @@ use App\Http\Controllers\DataController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CourseDataController;
+use App\Http\Controllers\SearchController;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -38,7 +39,11 @@ Route::get('/l/{course_link}', [CourseDataController::class, 'index'])
     ->name('link');  
 
 Route::get('/c/{course_link}', [CourseDataController::class, 'index'])
-    ->name('course');  
+    ->name('course'); 
+    
+    
+Route::get('/search', [SearchController::class, 'index'])
+    ->name('search');
 
 Route::get('/p/{course_link}', [CourseDataController::class, 'index'])
     ->name('post');

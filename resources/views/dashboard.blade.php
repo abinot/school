@@ -111,6 +111,7 @@
                     </div>
                 </div>
                 <livewire:course.ad />
+       
                 
             </div>
         </div>
